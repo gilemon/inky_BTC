@@ -12,7 +12,7 @@ import datetime
 
 
 #see doc at https://www.cryptonator.com/api
-url = "https://api.cryptonator.com/api/ticker/"
+urls = [["https://api.cryptonator.com/api/ticker/", "-", "ticker.price"], ["https://www.bitstamp.net/api/v2/ticker/btcusd/", "", "last"]]
 #Base - Base currency code
 base = "btc"
 # Target - Target currency code
@@ -29,19 +29,33 @@ args = parser.parse_args()
 if args.target is not None:
     target = args.target
 
-url = url + base + "-" + target
+values = None
+url_ink = 0
 
-print("reading: " + url)
+while (values is None) and (url_ink < len(urls)):
+    url = urls[url_ink][0] + base + urls[url_ink][1] + target
+    print("reading: " + url)
+    try:
+        output = check_output(['/usr/bin/curl', url])
+        print(output)
+        values = json.loads(output.decode('utf-8'))
+    except:
+        values = None
+        url_ink = url_ink + 1
 
-output = check_output(['/usr/bin/curl', url])
-#print(output)
-
+if values is None:
+    exit()
+    
 now = datetime.datetime.now() 
 
+parts = urls[url_ink][2].split(".")
+if len(parts) == 1:
+    price = int(float(values[parts[0]]))
+if len(parts) == 2:
+    price = int(float(values[parts[0]][parts[1]]))     
 #response = urlopen(url)
 #data = response.read()
-values = json.loads(output.decode('utf-8'))
-price = int(float(values['ticker']['price']))
+#price = int(float(values['ticker']['price']))
 print("retrieved: " + str(price))
 
 #sys.exit("Oy!")
