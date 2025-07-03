@@ -12,7 +12,7 @@ import datetime
 
 
 #see doc at https://www.cryptonator.com/api
-urls = [["https://api.cryptonator.com/api/ticker/", "-", "ticker.price"], ["https://www.bitstamp.net/api/v2/ticker/btcusd/", "", "last"]]
+urls = [["https://api.cryptonator.com/api/ticker/", "-", "ticker.price"], ["https://www.bitstamp.net/api/v2/ticker/", "", "last"]]
 #Base - Base currency code
 base = "btc"
 # Target - Target currency code
